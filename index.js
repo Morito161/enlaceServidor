@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.disable('x-powered-by');
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'views/pages')));
 // ejs motor de vistas
@@ -10,10 +11,13 @@ app.get('/', (req, res) =>{
     console.log('pagina cargada');
 });
 
-const server = app.listen(4500, function(){
-    console.log('listen to port 4500');
-    console.log('hola luisito');
-});
+const port = Number(process.env.PORT || 4500);
+const host = process.env.HOST || '127.0.0.1';
+if (require.main === module) {
+    app.listen(port, host, function () {
+        console.log(`Servidor escuchando en ${host}:${port}`);
+    });
+}
 
 app.get('/mercurio', (req, res) =>{
     res.render('pages/mercurio');
@@ -54,3 +58,4 @@ app.get('/neptuno', (req, res) =>{
     res.render('pages/neptuno');
     console.log('pagina cargada');
 });
+module.exports = app;
